@@ -176,12 +176,13 @@ def main() -> None:
     csv_plugin = CSVExportPlugin()
     json_plugin = JSONExportPlugin()
 
+    data_stream.print_processors_stats()
+
+    print("\nRegistering Processors\n")
     data_stream.register_processor(numeric_processor)
     data_stream.register_processor(text_processor)
     data_stream.register_processor(log_processor)
-    data_stream.print_processors_stats()
 
-    print("Registering Processors")
     batch = [
             'Hello world',
             [3.14, -1, 2.71],
@@ -195,7 +196,7 @@ def main() -> None:
             42,
             ['Hi', 'five']
         ]
-    print(f"Send first batch of data on stream {batch}\n")
+    print(f"Send first batch of data on stream: {batch}\n")
 
     data_stream.process_stream(batch)
     data_stream.print_processors_stats()
@@ -223,7 +224,7 @@ def main() -> None:
     data_stream.process_stream(batch)
     print()
     data_stream.print_processors_stats()
-    print("Send 5 processed data from each processor to a JSON plugin:")
+    print("\nSend 5 processed data from each processor to a JSON plugin:")
     data_stream.output_pipeline(5, json_plugin)
     print()
     data_stream.print_processors_stats()
