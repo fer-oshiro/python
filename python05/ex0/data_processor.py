@@ -18,10 +18,12 @@ class DataProcessor(ABC):
         pass
 
     def _store(self, item_convertido: str) -> None:
-        self._counter += 1
         self._data.append((self._counter, item_convertido))
+        self._counter += 1
 
     def output(self) -> tuple[int, str]:
+        if not self._data:
+            raise IndexError("No data left on processor")
         return self._data.pop(0)
 
 
@@ -30,10 +32,12 @@ class NumericProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         if isinstance(data, list) and data:
             for item in data:
-                if not (isinstance(item, (int, float))):
+                if (not isinstance(item, (int, float))
+                        or isinstance(item, bool)):
                     return False
             return True
-        return isinstance(data, (int, float))
+        return (isinstance(data, (int, float))
+                and not isinstance(data, bool))
 
     def ingest(self, data: int | float | list[int | float]) -> None:
         if not self.validate(data):
@@ -50,7 +54,9 @@ class TextProcessor(DataProcessor):
         if isinstance(data, str):
             return True
         if isinstance(data, list):
-            return all(isinstance(item, str) for item in data)
+            return len(data) > 0 and all(
+                isinstance(item, str) for item in data
+            )
         return False
 
     def ingest(self, data: str | list[str]) -> None:
@@ -66,20 +72,14 @@ class TextProcessor(DataProcessor):
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         if isinstance(data, dict):
-            return all(
+            return len(data) > 0 and all(
                 isinstance(key, str) and isinstance(value, str)
                 for key, value in data.items()
             )
         if isinstance(data, list):
-            for d in data:
-                if not isinstance(d, dict):
-                    return False
-                if not all(
-                    isinstance(key, str) and isinstance(value, str)
-                    for key, value in d.items()
-                ):
-                    return False
-            return True
+            return len(data) > 0 and all(
+                isinstance(d, dict) and self.validate(d) for d in data
+            )
         return False
 
     def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
