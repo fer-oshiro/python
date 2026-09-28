@@ -5,12 +5,12 @@ from ex0 import FlameFactory, AquaFactory, CreatureFactory
 
 def test_factory(factory: CreatureFactory) -> None:
     print("Testing factory")
-    base_creature = factory.create_base()
-    evolved_creature = factory.create_evolved()
-    print(base_creature.describe())
-    print(base_creature.attack())
-    print(evolved_creature.describe())
-    print(evolved_creature.attack())
+    creature_base = factory.create_base()
+    creature_evolved = factory.create_evolved()
+    print(creature_base.describe())
+    print(creature_base.attack())
+    print(creature_evolved.describe())
+    print(creature_evolved.attack())
 
 
 def battle(factory_a: CreatureFactory, factory_b: CreatureFactory) -> None:
