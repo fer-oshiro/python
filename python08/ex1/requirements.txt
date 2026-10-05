@@ -1,0 +1,9 @@
+# Runtime dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+
+# Development tools (type checking and linting)
+mypy>=1.0.0
+flake8>=6.0.0
+pandas-stubs>=2.0.0
