@@ -1,0 +1,6 @@
+# Runtime dependencies
+python-dotenv>=1.0.0
+
+# Development tools (type checking and linting)
+mypy>=1.0.0
+flake8>=6.0.0
